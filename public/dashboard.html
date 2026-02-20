@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Student Management System</title>
+    <!-- Google Fonts for premium typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Stark College</span>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" onclick="showSection('dashboard', this)">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('students', this)">
+                    <i class="fas fa-users"></i> Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('attendance', this)">
+                    <i class="fas fa-calendar-check"></i> Attendance
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('personal-details', this)">
+                    <i class="fas fa-id-card"></i> Personal Details
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('marks', this)">
+                    <i class="fas fa-chart-line"></i> Marks
+                </a>
+            </li>
+        </ul>
+        <a href="#" class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Logout
+        </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <h1 id="page-title">Dashboard Overview</h1>
+            <div class="user-profile">
+                <span id="user-role-badge"
+                    style="background:var(--primary-color); color:white; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:700; margin-right:12px; display:none; text-transform:uppercase; letter-spacing:0.5px;">-</span>
+                <span>Welcome, <strong id="username-display">User</strong></span>
+                <div class="avatar" id="user-avatar">U</div>
+            </div>
+        </header>
+
+        <!-- Dashboard Overview Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon bg-indigo"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h3 id="total-students-count">0</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Total Students in List</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-emerald"><i class="fas fa-check-circle"></i></div>
+                    <div>
+                        <h3 id="today-present-count">0</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Students Present Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-pink"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div>
+                        <h3 id="staff-name-display">-</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Class Advisor / Staff</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Details Section -->
+        <section id="students" class="content-section">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-title"><i class="fas fa-user-graduate"></i> Student Directory</div>
+                    <button class="btn-primary" id="btn-add-student" onclick="openModal('studentModal')"><i
+                            class="fas fa-plus"></i> Add Student</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Reg No</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>DOB</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th id="th-students-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attendance Section -->
+        <section id="attendance" class="content-section">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-title"><i class="fas fa-clipboard-list"></i> Attendance Records</div>
+                    <button class="btn-primary" id="btn-add-attendance" onclick="openModal('attendanceModal')"><i
+                            class="fas fa-plus"></i> Mark Attendance</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                                <th id="th-attendance-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marks Section -->
+        <section id="marks" class="content-section">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-title"><i class="fas fa-poll"></i> Examination Marks</div>
+                    <button class="btn-primary" id="btn-add-marks" onclick="openModal('marksModal')"><i
+                            class="fas fa-plus"></i> Add Marks</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Subject</th>
+                                <th>Marks</th>
+                                <th>Grade</th>
+                                <th id="th-marks-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marks-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Details Section -->
+        <section id="personal-details" class="content-section">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="section-title"><i class="fas fa-id-card"></i> Teacher Profile</div>
+
+                <div style="display: flex; gap: 32px; align-items: flex-start; margin-top: 24px;">
+                    <!-- Avatar Column -->
+                    <div style="text-align: center;">
+                        <div
+                            style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; font-weight: 700; margin-bottom: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            <span id="profile-initial">T</span>
+                        </div>
+                        <h3 id="profile-name" style="margin-bottom: 4px;">-</h3>
+                        <p id="profile-dept" style="color: var(--text-secondary); font-size: 14px;">-</p>
+                    </div>
+
+                    <!-- Details Column -->
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Staff
+                                ID</label>
+                            <div id="profile-staffid" style="font-weight: 500; font-size: 16px;">-</div>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Date
+                                of Birth</label>
+                            <div id="profile-dob" style="font-weight: 500; font-size: 16px;">-</div>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Email
+                                Address</label>
+                            <div id="profile-email" style="font-weight: 500; font-size: 16px;">-</div>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Phone
+                                Number</label>
+                            <div id="profile-phone" style="font-weight: 500; font-size: 16px;">-</div>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <label
+                                style="display: block; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Address</label>
+                            <div id="profile-address" style="font-weight: 500; font-size: 16px;">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top: 32px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 24px; text-align: right;">
+                    <button class="btn-primary" onclick="openEditProfileModal()"><i class="fas fa-edit"></i> Edit
+                        Profile</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="studentModalTitle">Add Student</h3>
+                <button class="close-btn" onclick="closeModal('studentModal')">&times;</button>
+            </div>
+            <form id="studentForm">
+                <input type="hidden" name="id" id="student-id">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" id="student-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Register Number</label>
+                    <input type="text" name="regNo" id="student-regNo" class="form-input" required
+                        placeholder="REG2023xxx">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" id="student-email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" name="phone" id="student-phone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="dob" id="student-dob" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Course</label>
+                    <input type="text" name="course" id="student-course" class="form-input" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('studentModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Attendance Modal -->
+    <div id="attendanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="attendanceModalTitle">Mark Attendance</h3>
+                <button class="close-btn" onclick="closeModal('attendanceModal')">&times;</button>
+            </div>
+            <form id="attendanceForm">
+                <input type="hidden" name="id" id="att-id">
+                <div class="form-group">
+                    <label class="form-label">Student Name</label>
+                    <input type="text" name="name" id="att-name" class="form-input" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" name="date" id="att-date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select name="status" id="att-status" class="form-select">
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Late">Late</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Remarks</label>
+                    <input type="text" name="remarks" id="att-remarks" class="form-input">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('attendanceModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="close-btn" onclick="closeModal('editProfileModal')">&times;</button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" id="edit-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Staff ID</label>
+                    <input type="text" name="staffId" id="edit-staffid" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <input type="text" name="department" id="edit-dept" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" name="phone" id="edit-phone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="dob" id="edit-dob" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" id="edit-address" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" id="edit-email" class="form-input">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('editProfileModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Marks Modal -->
+    <div id="marksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="marksModalTitle">Add Marks</h3>
+                <button class="close-btn" onclick="closeModal('marksModal')">&times;</button>
+            </div>
+            <form id="marksForm">
+                <input type="hidden" name="id" id="mark-id">
+                <div class="form-group">
+                    <label class="form-label">Student Name</label>
+                    <input type="text" name="name" id="mark-name" class="form-input" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" name="subject" id="mark-subject" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Marks</label>
+                    <input type="number" name="marks" id="mark-marks" class="form-input" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grade</label>
+                    <input type="text" name="grade" id="mark-grade" class="form-input" required
+                        placeholder="A, B+, etc">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('marksModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Marks</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Intercept all fetch requests to add Authorization header
+        const originalFetch = window.fetch;
+        window.fetch = async function (url, options = {}) {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`
+                };
+            }
+
+            try {
+                const response = await originalFetch(url, options);
+                if (response.status === 401) {
+                    console.warn('Unauthorized access, redirecting to login...');
+                    localStorage.removeItem('access_token');
+                    window.location.href = 'login.html';
+                }
+                return response;
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
+        };
+
+        const mockActivity = [
+            { activity: "Logged In", user: "Admin", time: "2 mins ago", status: "Success" },
+            { activity: "Updated Marks", user: "Prof. Snape", time: "1 hour ago", status: "Pending Review" },
+            { activity: "New Student Registered", user: "System", time: "3 hours ago", status: "Completed" },
+        ];
+
+        // Functions to populate tables
+        function populateStudents(data) {
+            const tbody = document.getElementById('students-table');
+            tbody.innerHTML = data.map(s => `
+                <tr>
+                    <td>#${s.id}</td>
+                    <td><span style="font-family: monospace; font-size: 13px; background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 4px;">${s.regNo || '-'}</span></td>
+                    <td><div style="font-weight: 500;">${s.name}</div></td>
+                    <td>${s.phone || '-'}</td>
+                    <td>${s.dob || '-'}</td>
+                    <td>${s.email}</td>
+                    <td><span class="badge badge-success">${s.course}</span></td>
+                    <td>
+                        <button onclick="editStudent(${s.id})" style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteStudent(${s.id})" style="border:none; background:none; color:var(--secondary-color); cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+        }
+
+
+        let globalStudentsData = [];
+        const userRole = localStorage.getItem('role') || 'staff';
+
+        function populateStudents(data) {
+            globalStudentsData = data;
+            const tbody = document.getElementById('students-table');
+
+            // Hide Actions Header if student
+            if (userRole === 'student') {
+                const th = document.getElementById('th-students-actions');
+                if (th) th.style.display = 'none';
+            }
+
+            tbody.innerHTML = data.map(s => `
+                <tr>
+                    <td>#${s.id}</td>
+                    <td><span style="font-family: monospace; font-size: 13px; background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 4px;">${s.regNo || '-'}</span></td>
+                    <td><div style="font-weight: 500;">${s.name}</div></td>
+                    <td>${s.phone || '-'}</td>
+                    <td>${s.dob || '-'}</td>
+                    <td>${s.email}</td>
+                    <td><span class="badge badge-success">${s.course}</span></td>
+                    ${userRole !== 'student' ? `
+                    <td>
+                        <button onclick="editStudent(${s.id})" style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteStudent(${s.id})" style="border:none; background:none; color:var(--secondary-color); cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                    </td>` : ''}
+                </tr>
+            `).join('');
+
+            document.getElementById('total-students-count').textContent = data.length;
+            // Also update sidebar/other places if needed
+            const totalSpan = document.getElementById('total-students');
+            if (totalSpan) totalSpan.textContent = data.length;
+        }
+
+        let globalAttendanceData = [];
+        let globalMarksData = [];
+
+        function populateAttendance(data) {
+            globalAttendanceData = data;
+            const tbody = document.getElementById('attendance-table');
+
+            // Hide Actions Header if student
+            if (userRole === 'student') {
+                const th = document.getElementById('th-attendance-actions');
+                if (th) th.style.display = 'none';
+            }
+
+            tbody.innerHTML = data.map(a => {
+                let badgeClass = 'badge-success';
+                if (a.status === 'Absent') badgeClass = 'badge-danger';
+                if (a.status === 'Late') badgeClass = 'badge-warning';
+
+                return `
+                <tr>
+                    <td><div style="font-weight: 500;">${a.name}</div></td>
+                    <td>${a.date}</td>
+                    <td><span class="badge ${badgeClass}">${a.status}</span></td>
+                    <td>${a.remarks}</td>
+                    ${userRole !== 'student' ? `
+                     <td>
+                        <button onclick="editAttendance(${a.id})" style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteAttendance(${a.id})" style="border:none; background:none; color:var(--secondary-color); cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                    </td>` : ''}
+                </tr>
+            `}).join('');
+
+            // Calculate Present Today
+            const today = new Date().toISOString().split('T')[0];
+            const presentCount = data.filter(a => a.date === today && a.status === 'Present').length;
+            const presentElement = document.getElementById('today-present-count');
+            if (presentElement) presentElement.textContent = presentCount;
+
+            // Fallback Average calc removal or keep hidden
+            const avgElement = document.getElementById('avg-attendance');
+            if (avgElement) avgElement.textContent = '85%'; // Mock or remove
+        }
+
+        function populateMarks(data) {
+            globalMarksData = data;
+            const tbody = document.getElementById('marks-table');
+
+            // Hide Actions Header if student
+            if (userRole === 'student') {
+                const th = document.getElementById('th-marks-actions');
+                if (th) th.style.display = 'none';
+            }
+
+            tbody.innerHTML = data.map(m => `
+                <tr>
+                    <td><div style="font-weight: 500;">${m.name}</div></td>
+                    <td>${m.subject}</td>
+                    <td><strong>${m.marks}</strong></td>
+                    <td><span class="badge badge-${m.grade.startsWith('A') ? 'success' : m.grade.startsWith('B') ? 'warning' : 'danger'}">${m.grade}</span></td>
+                    ${userRole !== 'student' ? `
+                     <td>
+                        <button onclick="editMark(${m.id})" style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteMark(${m.id})" style="border:none; background:none; color:var(--secondary-color); cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                    </td>` : ''}
+                </tr>
+            `).join('');
+
+            const topPerf = document.getElementById('top-performer'); // Might be removed
+            if (topPerf) topPerf.textContent = "Jane Smith";
+        }
+
+        function populateActivity() {
+            // Activity table removed
+        }
+
+        // Navigation Interactivity
+        function showSection(sectionId, linkElement) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            linkElement.classList.add('active');
+
+            // Update Header Title
+            const titles = {
+                'dashboard': 'Dashboard Overview',
+                'students': 'Student Management',
+                'attendance': 'Attendance System',
+                'marks': 'Marks & Grading',
+                'personal-details': 'My Personal Details'
+            };
+            document.getElementById('page-title').textContent = titles[sectionId];
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+        }
+
+        // Helper Edit Functions
+        function editStudent(id) {
+            const student = globalStudentsData.find(s => s.id === id);
+            if (student) {
+                document.getElementById('student-id').value = student.id;
+                document.getElementById('student-name').value = student.name;
+                document.getElementById('student-regNo').value = student.regNo || '';
+                document.getElementById('student-email').value = student.email;
+                document.getElementById('student-phone').value = student.phone || '';
+                document.getElementById('student-dob').value = student.dob || '';
+                document.getElementById('student-course').value = student.course;
+
+                document.getElementById('studentModalTitle').textContent = 'Edit Student';
+                openModal('studentModal');
+            }
+        }
+
+        async function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                await fetch(`/api/students/${id}`, { method: 'DELETE' });
+                loadData();
+            }
+        }
+
+        function editAttendance(id) {
+            const record = globalAttendanceData.find(a => a.id === id);
+            if (record) {
+                document.getElementById('att-id').value = record.id;
+                document.getElementById('att-name').value = record.name;
+                document.getElementById('att-date').value = record.date;
+                document.getElementById('att-status').value = record.status;
+                document.getElementById('att-remarks').value = record.remarks || '';
+                document.getElementById('attendanceModalTitle').textContent = 'Edit Attendance';
+                openModal('attendanceModal');
+            }
+        }
+
+        async function deleteAttendance(id) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                console.log("Deleting attendance ID:", id);
+                try {
+                    const response = await fetch(`/api/attendance/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        console.log("Delete successful");
+                        loadData();
+                    } else {
+                        console.error("Delete failed", response.status);
+                        alert("Failed to delete record");
+                    }
+                } catch (e) {
+                    console.error("Delete error", e);
+                    alert("Error deleting record");
+                }
+            }
+        }
+
+        function editMark(id) {
+            const record = globalMarksData.find(m => m.id === id);
+            if (record) {
+                document.getElementById('mark-id').value = record.id;
+                document.getElementById('mark-name').value = record.name;
+                document.getElementById('mark-subject').value = record.subject;
+                document.getElementById('mark-marks').value = record.marks;
+                document.getElementById('mark-grade').value = record.grade;
+                document.getElementById('marksModalTitle').textContent = 'Edit Marks';
+                openModal('marksModal');
+            }
+        }
+
+        async function deleteMark(id) {
+            if (confirm('Are you sure you want to delete this mark?')) {
+                await fetch(`/api/marks/${id}`, { method: 'DELETE' });
+                loadData();
+            }
+        }
+
+        // Helper Open Modal Function
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        // Reset modals on close
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+
+            // Wait slightly for transition then reset
+            setTimeout(() => {
+                if (modalId === 'attendanceModal') {
+                    document.getElementById('attendanceForm').reset();
+                    document.getElementById('att-id').value = '';
+                    document.getElementById('attendanceModalTitle').textContent = 'Mark Attendance';
+                } else if (modalId === 'marksModal') {
+                    document.getElementById('marksForm').reset();
+                    document.getElementById('mark-id').value = '';
+                    document.getElementById('marksModalTitle').textContent = 'Add Marks';
+                } else if (modalId === 'studentModal') {
+                    document.getElementById('studentForm').reset();
+                    document.getElementById('student-id').value = '';
+                    document.getElementById('studentModalTitle').textContent = 'Add Student';
+                }
+            }, 300);
+        }
+
+        // Edit Profile Logic
+
+        function openEditProfileModal() {
+            try {
+                // Get current displayed values
+                const name = document.getElementById('profile-name').textContent;
+                const staffId = document.getElementById('profile-staffid').textContent;
+                const dept = document.getElementById('profile-dept').textContent;
+                const phone = document.getElementById('profile-phone').textContent;
+                const dob = document.getElementById('profile-dob').textContent;
+                const address = document.getElementById('profile-address').textContent;
+                const email = document.getElementById('profile-email').textContent;
+
+                // Populate form
+                document.getElementById('edit-name').value = name;
+                document.getElementById('edit-staffid').value = staffId !== '-' ? staffId : '';
+                document.getElementById('edit-dept').value = dept !== '-' ? dept : '';
+                document.getElementById('edit-phone').value = phone !== '-' ? phone : '';
+                document.getElementById('edit-dob').value = dob !== '-' ? dob : '';
+                document.getElementById('edit-address').value = address !== '-' ? address : '';
+                document.getElementById('edit-email').value = email;
+
+                openModal('editProfileModal');
+            } catch (e) {
+                console.error("Error opening profile modal", e);
+                alert("Error: " + e.message);
+            }
+        }
+
+        // Data Management
+        async function loadData() {
+            try {
+                // Add timestamp to prevent caching
+                const t = new Date().getTime();
+                const [studentsRes, attendanceRes, marksRes, teacherRes] = await Promise.all([
+                    fetch('/api/students?t=' + t),
+                    fetch('/api/attendance?t=' + t),
+                    fetch('/api/marks?t=' + t),
+                    fetch('/api/teacher?t=' + t)
+                ]);
+
+                const students = await studentsRes.json();
+                const attendance = await attendanceRes.json();
+                const marks = await marksRes.json();
+                const teacher = await teacherRes.json();
+
+                populateStudents(students);
+                populateAttendance(attendance);
+                populateMarks(marks);
+                populateActivity();
+
+                const userEmail = localStorage.getItem('user_email');
+
+                // Hide Add Buttons for students
+                if (userRole === 'student') {
+                    if (document.getElementById('btn-add-student')) document.getElementById('btn-add-student').style.display = 'none';
+                    if (document.getElementById('btn-add-attendance')) document.getElementById('btn-add-attendance').style.display = 'none';
+                    if (document.getElementById('btn-add-marks')) document.getElementById('btn-add-marks').style.display = 'none';
+                    // Hide Edit Profile button using selector
+                    const editBtn = document.querySelector('button[onclick="openEditProfileModal()"]');
+                    if (editBtn) editBtn.style.display = 'none';
+                }
+
+                // Profile Logic
+                if (userRole === 'student') {
+                    // Update Staff Name in Dashboard even for students
+                    if (teacher) {
+                        const staffNameElement = document.getElementById('staff-name-display');
+                        if (staffNameElement) staffNameElement.textContent = teacher.name;
+                    }
+
+                    // Show Student Profile
+                    const badge = document.getElementById('user-role-badge');
+                    if (badge) { badge.textContent = 'Student'; badge.style.background = 'var(--secondary-color)'; badge.style.display = 'inline-block'; }
+                    const myProfile = students.find(s => s.email === userEmail);
+
+
+                    const firstName = localStorage.getItem('user_firstname');
+                    const lastName = localStorage.getItem('user_lastname');
+                    const username = localStorage.getItem('user_username');
+                    const fullName = (firstName && lastName) ? `${firstName} ${lastName}` : (firstName || username || 'Student');
+
+                    // Default Header Display
+                    document.getElementById('username-display').textContent = firstName || username || 'User';
+                    document.getElementById('user-avatar').textContent = (firstName || username || 'U').charAt(0).toUpperCase();
+
+                    if (myProfile) {
+                        document.querySelector('#personal-details .section-title').innerHTML = '<i class="fas fa-id-card"></i> Student Profile';
+                        document.getElementById('profile-initial').textContent = myProfile.name.charAt(0);
+                        document.getElementById('profile-name').textContent = myProfile.name;
+
+                        const labels = document.querySelectorAll('#personal-details label');
+                        if (labels[0]) labels[0].textContent = 'Register Number';
+
+                        document.getElementById('profile-dept').textContent = myProfile.course;
+                        document.getElementById('profile-staffid').textContent = myProfile.regNo || '-';
+                        document.getElementById('profile-dob').textContent = myProfile.dob || '-';
+                        document.getElementById('profile-email').textContent = myProfile.email;
+                        document.getElementById('profile-phone').textContent = myProfile.phone || '-';
+                        document.getElementById('profile-address').textContent = myProfile.address || '-';
+
+                        document.getElementById('username-display').textContent = myProfile.name.split(' ')[0];
+                        document.getElementById('user-avatar').textContent = myProfile.name.charAt(0);
+                    } else {
+                        // Fallback Profile Logic using LocalStorage
+                        document.querySelector('#personal-details .section-title').innerHTML = '<i class="fas fa-id-card"></i> Student Profile';
+                        document.getElementById('profile-initial').textContent = fullName.charAt(0).toUpperCase();
+
+                        // Show Name and Username
+                        document.getElementById('profile-name').innerHTML = `${fullName} <div style="font-size:14px; font-weight:400; color:var(--text-secondary); margin-top:4px;">@${username || 'student'}</div>`;
+
+                        const labels = document.querySelectorAll('#personal-details label');
+                        if (labels[0]) labels[0].textContent = 'Username';
+
+                        document.getElementById('profile-dept').textContent = 'Student';
+                        document.getElementById('profile-staffid').textContent = username || '-';
+                        document.getElementById('profile-dob').textContent = '-';
+                        document.getElementById('profile-email').textContent = userEmail;
+                        document.getElementById('profile-phone').textContent = '-';
+                        document.getElementById('profile-address').textContent = '-';
+                    }
+                } else {
+                    // Show Teacher Profile
+                    const badge = document.getElementById('user-role-badge');
+                    if (badge) { badge.textContent = 'Staff'; badge.style.background = 'var(--primary-color)'; badge.style.display = 'inline-block'; }
+                    document.getElementById('user-role-badge').textContent = 'Staff';
+                    document.getElementById('user-role-badge').style.background = '#4f46e5'; // Indigo
+                    document.getElementById('user-role-badge').style.color = 'white';
+
+                    if (teacher) {
+                        const staffNameElement = document.getElementById('staff-name-display');
+                        if (staffNameElement) staffNameElement.textContent = teacher.name;
+
+                        document.getElementById('profile-initial').textContent = teacher.name.charAt(0);
+                        document.getElementById('profile-name').textContent = teacher.name;
+                        document.getElementById('profile-dept').textContent = teacher.department || '-';
+                        document.getElementById('profile-staffid').textContent = teacher.staffId || '-';
+                        document.getElementById('profile-dob').textContent = teacher.dob || '-';
+                        document.getElementById('profile-email').textContent = teacher.email;
+                        document.getElementById('profile-phone').textContent = teacher.phone || '-';
+                        document.getElementById('profile-address').textContent = teacher.address || '-';
+
+                        document.getElementById('username-display').textContent = teacher.name.split(' ')[0];
+                        document.getElementById('user-avatar').textContent = teacher.name.charAt(0);
+                    }
+                }
+
+            } catch (err) {
+                console.error("Failed to load data", err);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+
+            // Handle Forms
+            document.getElementById('studentForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                if (data.id) {
+                    await fetch(`/api/students/${data.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    await fetch('/api/students', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                closeModal('studentModal');
+                loadData();
+            });
+
+            document.getElementById('attendanceForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                if (data.id) {
+                    await fetch(`/api/attendance/${data.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    await fetch('/api/attendance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                closeModal('attendanceModal');
+                loadData();
+            });
+
+            document.getElementById('marksForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                if (data.id) {
+                    await fetch(`/api/marks/${data.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    await fetch('/api/marks', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                closeModal('marksModal');
+                loadData();
+            });
+
+            document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                await fetch(`/api/teacher`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('editProfileModal');
+                loadData();
+                alert('Teacher Profile updated successfully!');
+            });
+        });
+
+    </script>
+</body>
+
+</html>

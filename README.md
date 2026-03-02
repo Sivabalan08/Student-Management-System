@@ -1,16 +1,16 @@
 🎓 Student Management System API
-<p align="center"> <img src="https://nestjs.com/img/logo-small.svg" width="100" alt="NestJS Logo" /> </p> <p align="center"> A RESTful backend API built using <b>NestJS</b> and <b>PostgreSQL</b> to manage student records efficiently. </p>
+<p align="center"> <img src="https://nestjs.com/img/logo-small.svg" width="100" alt="NestJS Logo"/> </p> <p align="center"> A RESTful backend API built using <b>NestJS</b> and <b>PostgreSQL</b> </p>
 🚀 Project Overview
 
-The Student Management System API is a backend application developed to practice scalable and modular architecture using NestJS.
+The Student Management System API is a backend application built to practice scalable and modular architecture using NestJS.
 
 This project demonstrates:
 
 Clean project structure
 
-Layered architecture (Controller → Service → Module)
+Controller → Service architecture
 
-PostgreSQL database integration
+PostgreSQL integration
 
 DTO validation
 
@@ -34,35 +34,33 @@ Postman
 
 Create a new student
 
-Retrieve all students
+Get all students
 
-Retrieve a student by ID
+Get student by ID
 
 Update student details
 
-Delete a student
+Delete student
 
 DTO validation using class-validator
 
-Environment configuration using .env
-
-Structured and scalable backend architecture
+Environment-based configuration
 
 ⚙️ Installation
 npm install
-▶️ Running the Application
-# Development mode
+▶️ Run the Application
+# Development
 npm run start:dev
 
-# Production mode
+# Production
 npm run start:prod
 
-The server will start at:
+Server runs at:
 
 http://localhost:3000
 🗄 Database Configuration
 
-Create a .env file in the root directory and add:
+Create a .env file:
 
 DB_HOST=localhost
 DB_PORT=5432
@@ -70,47 +68,15 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 DB_NAME=student_db
 
-Make sure PostgreSQL is running before starting the application.
+Make sure PostgreSQL is running.
 
 📬 API Endpoints
 Method	Endpoint	Description
-POST	/students	Create a student
+POST	/students	Create student
 GET	/students	Get all students
-GET	/students/:id	Get student by ID
+GET	/students/:id	Get by ID
 PUT	/students/:id	Update student
 DELETE	/students/:id	Delete student
-📷 Sample Response
-{
-  "id": 1,
-  "name": "John Doe",
-  "age": 21,
-  "email": "john@example.com",
-  "createdAt": "2024-04-23T10:12:45.522Z"
-}
-🧠 What I Learned
-
-Building modular backend systems
-
-Structuring scalable APIs
-
-Integrating PostgreSQL with TypeORM
-
-Writing clean service-based business logic
-
-Handling validation and exceptions
-
-🚀 Future Improvements
-
-JWT Authentication
-
-Role-based Authorization
-
-Pagination & Filtering
-
-Swagger API Documentation
-
-Deployment (Railway / Render / AWS)
-
 👨‍💻 Author
 
 Sivabalan

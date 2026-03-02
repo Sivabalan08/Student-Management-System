@@ -79,9 +79,13 @@ Method	Endpoint	Description
   GET	/students/:id	Get by ID
   PUT	/students/:id	Update student
   DELETE	/students/:id	Delete student
+
+
+
 👨‍💻 Author
 
 Sivabalan M
 
 Backend Developer | NestJS | PostgreSQL | TypeScript
+
 
